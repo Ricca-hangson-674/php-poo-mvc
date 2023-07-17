@@ -1,0 +1,49 @@
+version: "3.8"
+services:
+
+    db:
+        image: mysql
+        container_name: nrh_php-poo-mvc__mysql
+        restart: always
+        volumes:
+            - ./mysql:/var/lib/mysql
+        environment:
+            MYSQL_DATABASE: databasephp
+            MYSQL_ROOT_PASSWORD: root
+            # MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+            # MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+        ports:
+            - "3306"
+        networks:
+            - dev
+
+    phpmyadmin:
+        image: phpmyadmin
+        container_name: nrh_php-poo-mvc__phpmyadmin
+        restart: always
+        depends_on:
+            - db
+        ports:
+            - 8081:80
+        environment:
+            PMA_HOST: db
+        networks:
+            - dev
+
+    php-apache:
+        image: nrh674/nrh-php:8.0.28-apache
+        container_name: nrh_php-poo-mvc__php-apache
+        restart: unless-stopped
+        volumes:
+            - ./:/var/www:delegated
+            - ./docker/apache/apache.conf:/etc/apache2/sites-available/000-default.conf
+        ports:
+            - "8080:80"
+            - "9001:9000"
+        depends_on:
+            - db
+        networks:
+            - dev
+
+networks:
+    dev:

@@ -17,6 +17,8 @@ class DefaultController extends Controller
      */
     public function indexAction($page = 1)
     {
+        if (!$page) $page = 1;
+        
         $foos = $this->getDatabase()->getManager(Foo::class)->getPaginatedFoos($page);
         return $this->render("index.html.twig", [
             "foos" => $foos

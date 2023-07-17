@@ -8,6 +8,9 @@ use App\Response\RedirectResponse;
 use App\Response\Response;
 use App\Router\Router;
 
+use Twig\Loader\FilesystemLoader;
+use Twig\Environment;
+
 /**
  * Class Controller
  * @package App
@@ -45,9 +48,12 @@ class Controller
         $this->router = $router;
         $this->database = Database::getInstance($request);
         // On instancie le loader de twig en lui précisant dans quel dossier se trouvera nos vues
-        $loader = new \Twig_Loader_Filesystem([__DIR__.'/../src/View']);
+        # $loader = new \Twig_Loader_Filesystem([__DIR__.'/../src/View']);
+        $loader = new FilesystemLoader([__DIR__.'/../src/View']);
+        
         // On instancie l'environnement de twig, qui nous permettra de générer nos vues
-        $this->twig = new \Twig_Environment($loader, array(
+        # $this->twig = new \Twig_Environment($loader, array(
+        $this->twig = new Environment($loader, array(
             'cache' => false,
         ));
     }

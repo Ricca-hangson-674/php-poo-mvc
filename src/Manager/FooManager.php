@@ -14,10 +14,11 @@ use Model\Foo;
 
 class FooManager extends Manager
 {
-    public function getPaginatedFoos($page)
+    public function getPaginatedFoos($page = 1)
     {
-        $start = ($page-1)*10;
-        $statement = $this->pdo->prepare(sprintf("SELECT * FROM foo ORDER BY added_at DESC LIMIT %d,10", $start));
+        $start = ($page - 1) * 10;
+
+        $statement = $this->pdo->prepare(sprintf("SELECT * FROM foo ORDER BY added_at DESC LIMIT %d,10 ", $start));
         $statement->execute();
         $results = $statement->fetchAll(\PDO::FETCH_ASSOC);
         array_walk($results, function(&$foo) {
